@@ -8,7 +8,7 @@ import ResidentCard from './assets/Components/ResidentCard'
 function App() {
   
     const [search, setSearch] = useState(Math.floor(Math.random()*126 +1))
-    const [location, getLocation] = useFetch()
+    const [location, getLocation,isLoarding,asError] = useFetch()
 
 
    useEffect(() => {
@@ -23,6 +23,9 @@ function App() {
    }
   
   return (
+    isLoarding?<>
+    <h1>Loarding</h1>
+    </>:<>
     <section>
         <div className="header">
               <h1 className='title'>Rick and Morty</h1>
@@ -30,25 +33,35 @@ function App() {
                   <input type="number" ref={textInput} placeholder='Enter a number betwen (1-126)' />
                   <button>Search</button>
                 </form>
-              <LocationCard
-              location={location}/>
         </div>
-
-        <div className="cards-container">
-          {
+        {
+          asError?<>
+          <h2>The Location you are looking for Does not Exist</h2>
+            </>:
+            <>
+            <div className="header">
+            <LocationCard
+                location={location}/>
+            </div>
+          <div className="cards-container">
+            {
+                
+              location?.residents.map(resident =>(
+  
+              <ResidentCard 
+              key={resident}
+              url={resident}
+              />
+              )
+              )
               
-            location?.residents.map(resident =>(
-
-            <ResidentCard 
-            key={resident}
-            url={resident}
-            />
-            )
-            )
-            
-          }
-        </div>
+            }
+          </div>
+          </>
+        }
+          
     </section>
+    </>
   )
 }
 
